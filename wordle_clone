@@ -1,0 +1,380 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "3b73e2ed-52e4-4638-ab4b-1ac97488587f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import random \n",
+    "import pandas as pd\n",
+    "import sys\n",
+    "from termcolor import colored"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "2ebd1f0d-29bf-4eda-9396-dd0a7aef8696",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "file = \"wordle.csv\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "id": "5095139d-c71e-4c98-b33f-e3d5986f0604",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>word</th>\n",
+       "      <th>occurrence</th>\n",
+       "      <th>day</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>aahed</td>\n",
+       "      <td>1.850950e-09</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>aalii</td>\n",
+       "      <td>6.224471e-10</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>aargh</td>\n",
+       "      <td>2.158188e-10</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>aarti</td>\n",
+       "      <td>7.668332e-10</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>abaca</td>\n",
+       "      <td>6.320646e-08</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    word    occurrence  day\n",
+       "0  aahed  1.850950e-09  NaN\n",
+       "1  aalii  6.224471e-10  NaN\n",
+       "2  aargh  2.158188e-10  NaN\n",
+       "3  aarti  7.668332e-10  NaN\n",
+       "4  abaca  6.320646e-08  NaN"
+      ]
+     },
+     "execution_count": 69,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = pd.read_csv(file)\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "id": "9c9a8b09-b26f-4577-a6a7-cd2e2fa1c67a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 12972 entries, 0 to 12971\n",
+      "Data columns (total 3 columns):\n",
+      " #   Column      Non-Null Count  Dtype  \n",
+      "---  ------      --------------  -----  \n",
+      " 0   word        12972 non-null  object \n",
+      " 1   occurrence  12972 non-null  float64\n",
+      " 2   day         2315 non-null   float64\n",
+      "dtypes: float64(2), object(1)\n",
+      "memory usage: 304.2+ KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "df.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "cdc75ef1-3e8f-4404-a210-db9aa89db4f5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def print_menu():\n",
+    "    print(\"Let's play Wordle!\")\n",
+    "    print(\"Type a 5 letter word and press enter\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "id": "08b78918-3dd1-44b1-8112-e8ec8a158e82",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def select_random_word(words):\n",
+    "    num = random.randint(0, 12971)\n",
+    "    word = df['word'][num]\n",
+    "    return word\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "id": "9ae74383-f29d-4f29-879f-6b0316afe342",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "sceat\n"
+     ]
+    }
+   ],
+   "source": [
+    "word = select_random_word(words)\n",
+    "print(word)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "783b5c84-5b61-45c8-aabe-7bbb61d62b56",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_guess(guess, word, i):\n",
+    "    if guess[i] == word[i]:\n",
+    "        print(colored(guess[i], 'green'), end=\"\")\n",
+    "    elif guess[i] in word:\n",
+    "        print(colored(guess[i], 'yellow'), end=\"\")\n",
+    "    else:\n",
+    "        print(guess[i], end=\"\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "id": "8bcf830c-67fe-43fd-acb0-0df8773ac85a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Let's play Wordle!\n",
+      "Type a 5 letter word and press enter\n",
+      "\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " dsfb\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Please enter a 5 letter word\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " lkas\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Please enter a 5 letter word\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " djkls\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "djkl\u001b[32ms\u001b[0m\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " lkasd\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "lka\u001b[33ms\u001b[0md\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " nzxus\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "nzx\u001b[33mu\u001b[0m\u001b[32ms\u001b[0m\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " mjsil\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "mj\u001b[33ms\u001b[0mil\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " loasd\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "loa\u001b[33ms\u001b[0md\n",
+      "Please enter your guess\n"
+     ]
+    },
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      " sjkla\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\u001b[33ms\u001b[0mjkla\n",
+      "You have used all your attempts\n",
+      "\n",
+      "The word was trugs\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Game\n",
+    "print_menu()\n",
+    "word = select_random_word(words)\n",
+    "for attempt_num in range(1,7):\n",
+    "    print(\"\\nPlease enter your guess\")\n",
+    "    guess = input().lower()\n",
+    "    while len(guess) != 5:\n",
+    "        print(\"Please enter a 5 letter word\")\n",
+    "        guess = input().lower()\n",
+    "    for i in range(min(len(guess), 5)):\n",
+    "        if guess == word:\n",
+    "            print(colored(guess, 'green'), end=\"\")\n",
+    "            print(f\"\\nCongratulations! You got the Wordle in {attempt_num}\")\n",
+    "            break\n",
+    "        check_guess(guess, word, i)\n",
+    "print(\"\\nYou have used all your attempts\\n\")\n",
+    "print(\"The word was\", word)\n",
+    "    "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
